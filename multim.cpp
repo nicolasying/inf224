@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-#include "Multim.h"
+#include "multim.h"
 
 using namespace std;
 
@@ -8,7 +8,7 @@ int Multim::fileCounter = 0;
 int Multim::idGen = 0;
 
 Multim::Multim() {
-  name = "NewFile" + to_string(Multim::idGen);
+  name = "MediaObject" + Multim::getId();
   path = "";
   Multim::fileCounter++;
   Multim::idGen++;
@@ -52,4 +52,11 @@ int Multim::iniEnv() {
     Multim::fileCounter = 0;
     Multim::idGen = 0;
     return 0;
+}
+
+int Multim::play() const {
+    cerr << "Multimedia: Play called on an non-existing system file." << endl << "---Media Info---\n";
+    this.display(cerr);
+    cerr << "---End of Media Info---\n";
+    return 1;
 }
