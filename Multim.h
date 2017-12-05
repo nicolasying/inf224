@@ -19,9 +19,13 @@ public:
   std::string getPath() const;
   int setName(const std::string _name);
   int setPath(const std::string _path);
+
   virtual int display(std::ostream& _optScr) const;
-  inline static std::string getId() {return std::to_string(Multim::idGen);}
-  static int iniEnv();
+
+  static int iniEnv(); // Reset counters
+  inline static std::string getId() {return std::to_string(Multim::idGen);} // Get unique identifiers
+
+  virtual int play() const; // Play the file with system programs
 };
 
 #endif // !H_MULTIM
