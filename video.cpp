@@ -18,10 +18,10 @@ int Video::display(std::ostream& _optScr) const {
 
 int Video::play() const {
     if (path != "") {
-        system(c_str("mpv " + path + " &"));
+        system(("mpv " + path + " &").c_str());
         return 0;
     } else {
-        this.Multim::play();
+        this->Multim::play();
         return 1;
     }
 }

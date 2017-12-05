@@ -56,7 +56,7 @@ int Multim::iniEnv() {
 
 int Multim::play() const {
     cerr << "Multimedia: Play called on an non-existing system file." << endl << "---Media Info---\n";
-    this.display(cerr);
+    this->display(cerr);
     cerr << "---End of Media Info---\n";
     return 1;
 }

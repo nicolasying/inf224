@@ -19,3 +19,13 @@ int Photo::display(std::ostream& _optScr) const {
     _optScr << "\tType: Photo\n\tLatitude: " << latitude << "\n\tLongitude: " << longitude << endl;
     return 0;
 }
+
+int Photo::play() const {
+    if (path != "") {
+        system(("imagej " + path + " &").c_str());
+        return 0;
+    } else {
+        this->Multim::play();
+        return 1;
+    }
+}

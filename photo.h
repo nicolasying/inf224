@@ -18,7 +18,7 @@ public:
     int setLatitude(const double _latitude);
     int setLongitude(const double _longitude);
     int display(std::ostream& _optScr) const override;
-    int play() const override
+    int play() const override;
 };
 
 #endif // !H_PHOTO
