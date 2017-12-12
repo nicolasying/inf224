@@ -11,13 +11,21 @@ protected:
   int * chapterTable;
 public:
   Film(): Video("FilmObject" + Multim::getId(), "", -1), nChap(0), chapterTable(nullptr) {}
-  Film(const std::string _name, const std::string _path, const int _duration, const int _nChap, int * const _chapterTable):
+  Film(const std::string _name, const std::string _path, const int _duration, const int _nChap, const int * const _chapterTable):
     Video(_name, _path, _duration), nChap(_nChap), chapterTable(nullptr) {setChapters(_nChap, _chapterTable);}
 
   Film(const Film& copied): Video(copied) {
     chapterTable = nullptr;
     nChap = copied.nChap + 1;
     setChapters(copied.nChap, copied.chapterTable);
+  }
+  Film& operator=(const Film& copied) {
+    std::cout << "ase";
+    Video::operator=(copied);
+    chapterTable = nullptr;
+    nChap = copied.nChap + 1;
+    setChapters(copied.nChap, copied.chapterTable);
+    return *this;
   }
   ~Film();
   int getChapterNumber() const {return nChap;}
