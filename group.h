@@ -23,4 +23,5 @@ public:
     int display(std::ostream& _optScr) const;
 };
 
+using GrPtr = std::shared_ptr<Group>;
 #endif // !H_GROUP
