@@ -22,6 +22,7 @@ Multim::Multim(string _name, string _path) {
 }
 
 Multim::~Multim() {
+    cout << name << " is being destroyed." << endl;
     Multim::fileCounter--;
 }
 

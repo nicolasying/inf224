@@ -21,7 +21,6 @@ int Film::display(std::ostream& _optScr) const {
 }
 
 int Film::setChapters(const int _nChap, const int * const _chapterTable) {
-  std::cout << "asd";
   if(_nChap != nChap || !chapterTable) {
     delete[] chapterTable;
     nChap = _nChap;
