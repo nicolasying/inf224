@@ -20,7 +20,7 @@ public:
     setChapters(copied.nChap, copied.chapterTable);
   }
   Film& operator=(const Film& copied) {
-    std::cout << "ase";
+    std::cout << "Film:\tCopy Constructor Called." << std::endl;
     Video::operator=(copied);
     chapterTable = nullptr;
     nChap = copied.nChap + 1;

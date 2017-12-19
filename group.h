@@ -6,7 +6,7 @@
 #include <iostream>
 #include "multim.h"
 
-class Group : public std::list<Multim *> {
+class Group : public std::list<MulPtr> {
 private:
   static int groupCounter;
   static int idGen;

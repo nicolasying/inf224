@@ -22,7 +22,7 @@ Multim::Multim(string _name, string _path) {
 }
 
 Multim::~Multim() {
-    cout << name << " is being destroyed." << endl;
+    cout << "Multimedia:\t" << name << " is being destroyed." << endl;
     Multim::fileCounter--;
 }
 
@@ -45,7 +45,7 @@ int Multim::setPath(string _path) {
 }
 
 int Multim::display(ostream& _optScr) const {
-    _optScr << name << " : " << path << endl;
+    _optScr << "Multimedia:\t Display" << endl << "\t" << name << " : " << path << endl;
     return 0;
 }
 

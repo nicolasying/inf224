@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 
 class Multim {
 private:
@@ -27,5 +28,7 @@ public:
 
   virtual int play() const; // Play the file with system programs
 };
+
+using MulPtr = std::shared_ptr<Multim>;
 
 #endif // !H_MULTIM
