@@ -2,17 +2,75 @@
 //  main.cpp
 //
 
+#include <memory>
+#include <string>
 #include <iostream>
+#include <sstream>
 #include "multim.h"
 #include "video.h"
 #include "photo.h"
 #include "group.h"
 #include "film.h"
-
+#include "db.h"
+#include "tcpserver.h"
+using namespace cppu;
 using namespace std;
 
 
 int main(int argc, char* argv[]) {
+  const int PORT = atoi(argv[1]);
+  // cree l'objet qui gère les données
+  shared_ptr<DB> base(new DB());
+  GrPtr g1 = base->createGroup("Named Group");
+  GrPtr g2 = base->createGroup("New Group");
+  
+  {
+    MulPtr objectList[10];
+    
+    objectList[0] = base->createPhoto("Neige", "~/Desktop/inf224/1.jpg", 2014, 2014);
+    objectList[1] = base->createVideo("Norman 10 Million Bug", "~/Desktop/inf224/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120);
+    int tempTable[] = {1, 2, 3};
+    objectList[3] = base->createFilm("Norman 10 Million Bug 2", "~/Desktop/inf224/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+    objectList[4] = base->createFilm("Norman 10 Million Bug 3", "~/Desktop/inf224/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+    objectList[4]->setName("New Name");
+    
+    for (int i = 0; i < 5; i++) {
+      g1->push_back(objectList[i]);
+    }
+
+    for (int i = 0; i < 5; i += 2) {
+      g2->push_back(objectList[i]);
+    }
+  }
+
+  cout << "Main:\tContent Prepared." << endl;
+
+  // cree le TCPServer
+  shared_ptr<TCPServer> server(new TCPServer());
+  
+  
+
+  // le serveur appelera cette méthode chaque fois qu'il y a une requête
+  server->setCallback(*base, &DB::processRequest);
+  
+  // lance la boucle infinie du serveur
+  cout << "Starting Server on port " << PORT << endl;
+  
+  int status = server->run(PORT);
+  
+  // en cas d'erreur
+  if (status < 0) {
+    cerr << "Could not start Server on port " << PORT << endl;
+    return 1;
+  }
+  
+  return 0;
+}
+
+// Ancient version 
+/*
+int main(int argc, char* argv[]) {
+
 
   cout << "Main:\tBegin Test" << endl;
 
@@ -58,6 +116,6 @@ int main(int argc, char* argv[]) {
   g1->display(cout);
   g2->display(cout);
 
-
   return 0;
 }
+*/ // End of ancient version

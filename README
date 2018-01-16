@@ -15,3 +15,5 @@ INF224
 + 6e, défense contre la modification des contenus pointés retournés : genre ```const int * const```.
 + 7e, évite de fuite mémoire pour la classe ```Film```, dans laquelle il s'agit des allocations avec ```new```.
 + 7e, la copie d'objet copie des membres variables de l'instance, incluant les pointeurs. Sauf il faut copier les contenus pointés au lieu de copier simplement les pointeurs. (Une copie profonde)
+
++ 10e, pour éviter la manipulation des objets hors classe de gestion, on peut rendre les constructeurs et les destructeurs ```private```, et classe de gestion une classe ```friend``` des classes.
