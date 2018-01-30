@@ -11,3 +11,5 @@ html/*
 dox.cfg
 
 myprog
+server
+*.class

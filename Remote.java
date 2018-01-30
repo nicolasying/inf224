@@ -1,5 +1,3 @@
-import sun.plugin2.util.SystemUtil;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +24,7 @@ public class Remote extends JFrame {
     private BufferedWriter output;
 
     public static void main(String[] argv) {
-        if (SystemUtil.getOSType() == SystemUtil.MACOSX) {
+        if (System.getProperty("os.name").contains("mac")) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
         }
 

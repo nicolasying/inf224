@@ -27,18 +27,18 @@ int main(int argc, char* argv[]) {
   {
     MulPtr objectList[10];
     
-    objectList[0] = base->createPhoto("Neige", "~/Desktop/inf224/1.jpg", 2014, 2014);
-    objectList[1] = base->createVideo("Norman 10 Million Bug", "~/Desktop/inf224/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120);
+    objectList[0] = base->createPhoto("Neige", "./1.jpg", 2014, 2014);
+    objectList[1] = base->createVideo("Norman 10 Million Bug", "./NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120);
     int tempTable[] = {1, 2, 3};
-    objectList[3] = base->createFilm("Norman 10 Million Bug 2", "~/Desktop/inf224/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
-    objectList[4] = base->createFilm("Norman 10 Million Bug 3", "~/Desktop/inf224/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
-    objectList[4]->setName("New Name");
+    objectList[2] = base->createFilm("Norman 10 Million Bug 2", "./NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+    objectList[3] = base->createFilm("Norman 10 Million Bug 3", "./NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+    objectList[3]->setName("New Name"); // donne incohérence comme ce n'est pas le base qui gère le nommage.
     
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 4; i++) {
       g1->push_back(objectList[i]);
     }
 
-    for (int i = 0; i < 5; i += 2) {
+    for (int i = 0; i < 4; i += 2) {
       g2->push_back(objectList[i]);
     }
   }

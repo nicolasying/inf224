@@ -21,7 +21,7 @@ CLIENT_SOURCES = Remote.java
 #
 # Fichiers objets (ne pas modifier sauf si l'extension n'est pas .cpp)
 #
-OBJETS = ${SOURCES:%.cpp=%.o}
+OBJETS = ${SERVER_SOURCES:%.cpp=%.o}
 
 #
 # Compilateur C++
@@ -57,10 +57,10 @@ LDLIBS = -lpthread
 all: ${SERVER}
 
 run-${SERVER}: ${SERVER}
-	./${SERVER}
-
+	./${SERVER} 3333
+ 
 run-${CLIENT}: ${CLIENT}
-	java Remote
+	java Remote localhost 3333
 
 ${SERVER}: depend-${SERVER} ${OBJETS}
 	${CXX} -o $@ ${CXXFLAGS} ${LDFLAGS} ${OBJETS} ${LDLIBS}
