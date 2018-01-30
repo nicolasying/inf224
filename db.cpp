@@ -136,7 +136,7 @@ bool DB::processRequest(TCPConnection& cnx, const string& request, string& respo
             TCPLock lock(cnx);
             resBuf << "OK: " << endl << "Group Search Results: " << endl;
             searchGroup(name, resBuf);
-            resBuf << "OK: " << endl << "Media Search Results: " << endl;
+            resBuf << endl << "Media Search Results: " << endl;
             searchMedia(name, resBuf);
         } else if (req.compare(DB::reqPlay) == 0) {
             TCPLock lock(cnx);

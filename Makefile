@@ -7,15 +7,17 @@
 ##########################################
 
 #
-# Nom du programme
+# Nom du SERVERramme
 #
-PROG = myprog
+SERVER = server
+CLIENT = client
 
 #
 # Fichiers sources (NE PAS METTRE les .h ni les .o seulement les .cpp)
 #
-SOURCES = photo.cpp video.cpp multim.cpp group.cpp film.cpp main.cpp cppsocket.cpp tcpserver.cpp db.cpp
 
+SERVER_SOURCES = photo.cpp video.cpp multim.cpp group.cpp film.cpp main.cpp cppsocket.cpp tcpserver.cpp db.cpp
+CLIENT_SOURCES = Remote.java
 #
 # Fichiers objets (ne pas modifier sauf si l'extension n'est pas .cpp)
 #
@@ -49,31 +51,38 @@ LDLIBS = -lpthread
 ##########################################
 #
 # Regles de construction/destruction des .o et de l'executable
-# depend-${PROG} sera un fichier contenant les dependances
+# depend-${SERVER} sera un fichier contenant les dependances
 #
 
-all: ${PROG}
+all: ${SERVER}
 
-run: ${PROG}
-	./${PROG}
+run-${SERVER}: ${SERVER}
+	./${SERVER}
 
-${PROG}: depend-${PROG} ${OBJETS}
+run-${CLIENT}: ${CLIENT}
+	java Remote
+
+${SERVER}: depend-${SERVER} ${OBJETS}
 	${CXX} -o $@ ${CXXFLAGS} ${LDFLAGS} ${OBJETS} ${LDLIBS}
 
+${CLIENT}: 
+	javac ${CLIENT_SOURCES}
+
+
 clean:
-	-@$(RM) *.o depend-${PROG} core 1>/dev/null 2>&1
+	-@$(RM) *.o depend-${SERVER} core 1>/dev/null 2>&1
 
 clean-all: clean
-	-@$(RM) ${PROG} 1>/dev/null 2>&1
+	-@$(RM) ${SERVER} 1>/dev/null 2>&1
 
 tar:
-	tar cvf ${PROG}.tar.gz ${SOURCES}
+	tar cvf ${SERVER}.tar.gz ${SOURCES}
 
 # Gestion des dependances : creation automatique des dependances en utilisant
 # l'option -MM de g++ (attention tous les compilateurs n'ont pas cette option)
 #
-depend-${PROG}:
-	${CXX} ${CXXFLAGS} -MM ${SOURCES} > depend-${PROG}
+depend-${SERVER}:
+	${CXX} ${CXXFLAGS} -MM ${SOURCES} > depend-${SERVER}
 
 
 ###########################################
@@ -97,4 +106,4 @@ depend-${PROG}:
 #
 # Inclusion du fichier des dependances
 #
--include depend-${PROG}
+-include depend-${SERVER}
