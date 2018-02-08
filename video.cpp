@@ -25,3 +25,9 @@ int Video::play() const {
         return 1;
     }
 }
+
+ostream& Video::write(ostream& os) const {
+    Multim::write(os);
+    os << getDuration() << endl;
+    return os;
+}

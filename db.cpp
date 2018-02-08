@@ -13,6 +13,18 @@ using namespace cppu;
 const string DB::reqSearch = "SEARCH";
 const string DB::reqPlay = "PLAY";
 const string DB::reqDelete = "DELETE";
+const string DB::reqList = "LIST";
+const string DB::reqSerial = "SERIAL";
+
+const int PROTOCOL = 1;
+const string MEDIA_BEGIN = "__BEGIN_MEDIA__";
+const string MEDIA_END = "__END_MEDIA__";
+const string GROUP_BEGIN = "__BEGIN_GROUP__";
+const string GROUP_END = "__END_GROUP__";
+
+int atoi(string _s) {
+    return atoi(_s.c_str());
+}
 
 MulPtr DB::createPhoto(const std::string _name, const std::string _path, const double _latitude, const double _longitude) {
     if (media.find(_name) != media.end()) {
@@ -52,6 +64,18 @@ GrPtr DB::createGroup(const std::string _gName) {
         groups[_gName] = make_shared<Group>(_gName);
     }
     return groups[_gName];
+}
+
+void DB::listAll(ostream& _optScr) {
+    _optScr << "DB: Listing groups." << endl;
+    for (auto & it : groups) {
+        _optScr << it.first << ", ";
+    }
+    _optScr << endl << "DB: Listing media." << endl;
+    for (auto & it : media) {
+        _optScr << it.first << ", ";
+    }
+    _optScr << endl;
 }
 
 void DB::searchMedia(const std::string _name, ostream& _optScr) {
@@ -129,10 +153,10 @@ bool DB::processRequest(TCPConnection& cnx, const string& request, string& respo
     
     size_t del = request.find(" ");
     string req, name;
+    stringstream resBuf;
     if (del != string::npos) {
         req = request.substr(0, del);
         name = request.substr(del+1);
-        stringstream resBuf;
         if (req.compare(DB::reqSearch) == 0) {
             TCPLock lock(cnx);
             resBuf << "OK: " << endl << "Group Search Results: " << endl;
@@ -150,6 +174,16 @@ bool DB::processRequest(TCPConnection& cnx, const string& request, string& respo
             resBuf << "ERROR: UNSUPPORTED REQUEST" << endl;
         }
         response = resBuf.str();
+    } else if (request.compare(DB::reqList) == 0) {
+        TCPLock lock(cnx);
+        resBuf << "OK: " << endl << "Delaying request." << endl;
+        listAll(resBuf);
+        response = resBuf.str();
+    } else if (request.compare(DB::reqSerial) == 0) {
+        TCPLock lock(cnx);
+        resBuf << "OK: " << endl << "Delaying request." << endl;
+        resBuf << *this;
+        response = resBuf.str();
     } else {
         response = "ERROR: ILLEGAL REQUEST";
     }
@@ -158,4 +192,85 @@ bool DB::processRequest(TCPConnection& cnx, const string& request, string& respo
     replace(response.begin(), response.end(), '\n', ';');
     // renvoyer false si on veut clore la connexion avec le client
     return true;
+}
+
+
+ostream& operator<< (ostream& os, const DB& db) {
+    os << "PROTOCOL V " << PROTOCOL << endl;
+    os << MEDIA_BEGIN << endl;
+    for (auto & it : db.media) {
+        os << it.first << endl << *(it.second.get()) << endl;
+    }
+    os << MEDIA_END << endl;
+    return os;
+}
+
+istream& operator>> (istream& is, DB& db) {
+    string buff;
+
+    // check compatibility
+    getline(is, buff);
+    int targetV = atoi(buff.substr(buff.find_last_of(" ")+1));
+    if (targetV != PROTOCOL) {
+        throw Incompatibility(targetV, PROTOCOL);
+        return is;
+    } 
+    
+    // section detection
+    getline(is, buff);
+    if (buff.compare(MEDIA_BEGIN) == 0) {
+        try{
+            while(getline(is, buff)) { // buff = name in db
+                string name, path;
+                name = buff;
+                getline(is, buff); // buff = type
+                if(buff.compare("Photo") == 0) {
+                    getline(is, buff); // buff = name in object
+                    getline(is, path);
+                    int _latitude, _longitude;
+                    getline(is, buff); // buff = latitude
+                    _latitude = atoi(buff);
+                    getline(is, buff); // buff = longtitude
+                    _longitude = atoi(buff);
+                    db.createPhoto(name, path, _latitude, _longitude);
+                } else if (buff.compare("Video") == 0) {
+                    getline(is, buff); // buff = name in object
+                    getline(is, path);
+                    int _length;
+                    getline(is, buff); // buff = length
+                    _length = atoi(buff);
+                    db.createVideo(name, path, _length);
+                } else if (buff.compare("Film") == 0) {
+                    getline(is, buff); // buff = name in object
+                    getline(is, path);
+                    int _length, nChap;
+                    getline(is, buff); // buff = length
+                    _length = atoi(buff);
+                    getline(is, buff); // buff = nChap
+                    nChap = atoi(buff);
+                    int chaps[nChap];
+                    for (int i = 0; i < nChap; i++) {
+                        getline(is, buff); // buff = stamp
+                        chaps[i] = atoi(buff);
+                    }
+                    db.createFilm(name, path, _length, nChap, chaps);
+                } else {
+                    throw UnknownClass(buff);
+                }
+                getline(is, buff); // clear the marge
+            }
+        } catch (UnknownClass& c) {
+            if (c.className.compare(MEDIA_END) == 0) {
+                return is;
+            } else {
+                throw c;
+                return is;
+            }
+        } catch (ios::failure& e) {
+            return is;
+        }
+    } else {
+        throw SerialParseError(buff);
+        return is;
+    }
 }

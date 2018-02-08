@@ -17,6 +17,7 @@ public:
     int display(std::ostream& _optScr) const override;
 
     int play() const override;
+    std::ostream& write(std::ostream& os) const override;
 };
 
 #endif // !H_VIDEO

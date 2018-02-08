@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include "multim.h"
+#include "serialization.h"
 
 using namespace std;
 
@@ -60,4 +61,12 @@ int Multim::play() const {
     this->display(cerr);
     cerr << "---End of Media Info---\n";
     return 1;
+}
+
+ostream& Multim::write(ostream& os) const {
+    string className;
+    demangle(typeid(*this).name(), className);
+    os << className << endl;
+    os << getName() << endl << getPath() << endl;
+    return os;
 }

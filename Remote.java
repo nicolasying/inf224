@@ -15,7 +15,7 @@ public class Remote extends JFrame {
     JPanel bHolder;
     JTextArea txt;
     JTextField requestField;
-    JButton b1, b2, bExit;
+    JButton b1, b2, b3, bExit;
 
     static final String DEFAULT_HOST = "localhost";
     static final int DEFAULT_PORT = 3332;
@@ -62,6 +62,7 @@ public class Remote extends JFrame {
         bHolder.setLayout(new GridLayout());
         b1 = new JButton("SEARCH");
         b2 = new JButton("PLAY");
+        b3 = new JButton("LIST");
         bExit = new JButton("Exit");
 
         menuBar.add(menu);
@@ -105,6 +106,34 @@ public class Remote extends JFrame {
             }
         }
 
+        class MyButton3 extends AbstractAction {
+            public MyButton3(String name) {
+                super(name);
+            }
+
+            public void actionPerformed(ActionEvent e) {
+                txt.setText("\nRequest to list all media.\n");
+                String request = "LIST";
+                String response = send(request);
+                response = response.replace(';', '\n');
+                txt.append("Response from server: " + response);
+            }
+        }
+
+        class MyButton4 extends AbstractAction {
+            public MyButton4(String name) {
+                super(name);
+            }
+
+            public void actionPerformed(ActionEvent e) {
+                txt.setText("\nRequest to list all media.\n");
+                String request = "SERIAL";
+                String response = send(request);
+                response = response.replace(';', '\n');
+                txt.append("Response from server: " + response);
+            }
+        }
+
         class MyButtonExit extends AbstractAction {
             public MyButtonExit(String name) {
                 super(name);
@@ -117,20 +146,28 @@ public class Remote extends JFrame {
 
         MyButton1 a1 = new MyButton1("SEARCH");
         MyButton2 a2 = new MyButton2("PLAY");
+        MyButton3 a3 = new MyButton3("LIST");
+        MyButton4 a4 = new MyButton4("DUMP");
         MyButtonExit aE = new MyButtonExit("EXIT");
 
         b1.addActionListener(a1);
         b2.addActionListener(a2);
+        b3.addActionListener(a3);
         bExit.addActionListener(aE);
         bHolder.add(requestField);
         bHolder.add(b1);
         bHolder.add(b2);
+        bHolder.add(b3);
         bHolder.add(bExit);
         toolBar.add(a1);
         toolBar.add(a2);
+        toolBar.add(a3);
+        toolBar.add(a4);
         toolBar.add(aE);
         menu.add(a1);
         menu.add(a2);
+        menu.add(a3);
+        menu.add(a4);
         menu.add(aE);
 
 

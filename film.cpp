@@ -29,3 +29,12 @@ int Film::setChapters(const int _nChap, const int * const _chapterTable) {
   for(int i = 0; i < nChap; i++) chapterTable[i] = _chapterTable[i];
   return 0;
 }
+
+ostream& Film::write(ostream& os) const {
+    Video::write(os);
+    os << getChapterNumber() << endl;
+    for (int i = 0; i < nChap; i++) {
+      os << chapterTable[i] << endl;
+    }
+    return os;
+}

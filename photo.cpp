@@ -29,3 +29,8 @@ int Photo::play() const {
         return 1;
     }
 }
+ostream& Photo::write(ostream& os) const {
+    Multim::write(os);
+    os << getLatitude() << endl << getLongitude() << endl;
+    return os;
+}

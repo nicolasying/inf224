@@ -27,6 +27,9 @@ public:
   inline static std::string getId() {return std::to_string(Multim::idGen);} // Get unique identifiers
 
   virtual int play() const; // Play the file with system programs
+
+  friend std::ostream& operator<<(std::ostream& os, const Multim& obj) {return obj.write(os); };
+  virtual std::ostream& write(std::ostream& os) const;
 };
 
 using MulPtr = std::shared_ptr<Multim>;

@@ -20,17 +20,22 @@ private:
   static const std::string reqSearch;
   static const std::string reqPlay;
   static const std::string reqDelete;
+  static const std::string reqList;
+  static const std::string reqSerial;
 public:
   MulPtr createPhoto(const std::string _name, const std::string _path, const double _latitude, const double _longitude);
   MulPtr createVideo(const std::string _name, const std::string _path, const int _duration);
   MulPtr createFilm(const std::string _name, const std::string _path, const int _duration, const int _nChap, const int * const _chapterTable);
   GrPtr createGroup(const std::string _gName);
+  void listAll(std::ostream& _optScr);
   void searchMedia(const std::string _name, std::ostream& _optScr);
   void searchGroup(const std::string _name, std::ostream& _optScr);
   void playMedia(const std::string _name);
   void deleteMedia(const std::string _name);
   void deleteGroup(const std::string _name);
   bool processRequest(cppu::TCPConnection& cnx, const std::string& request, std::string& response);
+  friend std::ostream& operator<<(std::ostream& os, const DB& db);
+  friend std::istream& operator>>(std::istream& is, DB& db);
 };
 
 

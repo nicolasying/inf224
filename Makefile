@@ -34,7 +34,7 @@ CXX = c++
 #   -std=c++11 pour C++11
 # Exemple: CXXFLAGS= -std=c++11 -Wall -O -I/usr/local/qt/include
 #
-CXXFLAGS = -std=c++11 -Wall -g
+CXXFLAGS = -std=c++11 -Wall -g 
 
 #
 # Options de l'editeur de liens
@@ -54,7 +54,9 @@ LDLIBS = -lpthread
 # depend-${SERVER} sera un fichier contenant les dependances
 #
 
-all: ${SERVER}
+all: 
+	make ${SERVER}
+	make ${CLIENT}
 
 run-${SERVER}: ${SERVER}
 	./${SERVER} 3333
@@ -71,6 +73,7 @@ ${CLIENT}:
 
 clean:
 	-@$(RM) *.o depend-${SERVER} core 1>/dev/null 2>&1
+	-@$(RM) *.class
 
 clean-all: clean
 	-@$(RM) ${SERVER} 1>/dev/null 2>&1

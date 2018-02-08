@@ -32,7 +32,7 @@ public:
   const int * const getChapterTable() const {return (const int * const) chapterTable;} // Protection on pointer and table contents by casting const
   int setChapters(const int _nChap, const int * const _chapterTable);
   int display(std::ostream& _optScr) const override;
-
+  std::ostream& write(std::ostream& os) const override;
   // int play() const override; // Use Video::play instead
 };
 

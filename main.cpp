@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
+#include <stdexcept>
 #include "multim.h"
 #include "video.h"
 #include "photo.h"
@@ -16,45 +18,59 @@
 using namespace cppu;
 using namespace std;
 
+#ifndef CONT_VER
+static int PORT = 3331;
 
 int main(int argc, char* argv[]) {
-  const int PORT = atoi(argv[1]);
-  // cree l'objet qui gère les données
-  shared_ptr<DB> base(new DB());
-  GrPtr g1 = base->createGroup("Named Group");
-  GrPtr g2 = base->createGroup("New Group");
+  if (argc < 2) {
+    cerr << "Insufficient arguments: \nserver [port] [file]*\n";
+  } else if (argc >= 2) {
+    PORT = atoi(argv[1]);
+  } 
   
-  {
-    MulPtr objectList[10];
-    
-    objectList[0] = base->createPhoto("Neige", "./1.jpg", 2014, 2014);
-    objectList[1] = base->createVideo("Norman 10 Million Bug", "./NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120);
-    int tempTable[] = {1, 2, 3};
-    objectList[2] = base->createFilm("Norman 10 Million Bug 2", "./NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
-    objectList[3] = base->createFilm("Norman 10 Million Bug 3", "./NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
-    objectList[3]->setName("New Name"); // donne incohérence comme ce n'est pas le base qui gère le nommage.
-    
-    for (int i = 0; i < 4; i++) {
-      g1->push_back(objectList[i]);
-    }
+  shared_ptr<DB> base(new DB());
 
-    for (int i = 0; i < 4; i += 2) {
-      g2->push_back(objectList[i]);
+  if (argc >= 3) {
+    ifstream sf(argv[2], ios_base::in);
+    sf.exceptions(std::ifstream::failbit|std::ifstream::badbit);
+    cerr << "Main: Loading media from dump file..." << endl;
+    sf >> *(base.get());
+  } else {
+    cerr << "Main: Loading media from default configuration..." << endl;
+    GrPtr g1 = base->createGroup("Named Group");
+    GrPtr g2 = base->createGroup("New Group");
+
+    {
+      MulPtr objectList[10];
+      
+      objectList[0] = base->createPhoto("Neige", "./scr/1.jpg", 2014, 2014);
+      objectList[1] = base->createVideo("Norman 10 Million Bug", "./scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120);
+      int tempTable[] = {1, 2, 3};
+      objectList[2] = base->createFilm("Norman 10 Million Bug 2", "./scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+      objectList[3] = base->createFilm("Norman 10 Million Bug 3", "./scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+      objectList[3]->setName("New Name"); // donne incohérence comme ce n'est pas le base qui gère le nommage.
+      
+      for (int i = 0; i < 4; i++) {
+        g1->push_back(objectList[i]);
+      }
+
+      for (int i = 0; i < 4; i += 2) {
+        g2->push_back(objectList[i]);
+      }
     }
   }
 
-  cout << "Main:\tContent Prepared." << endl;
 
+  cerr << "Main:\tContent Prepared." << endl;
+  
   // cree le TCPServer
   shared_ptr<TCPServer> server(new TCPServer());
-  
-  
 
   // le serveur appelera cette méthode chaque fois qu'il y a une requête
   server->setCallback(*base, &DB::processRequest);
   
   // lance la boucle infinie du serveur
-  cout << "Starting Server on port " << PORT << endl;
+  cerr << "Starting Server on port " << PORT << endl;
   
   int status = server->run(PORT);
   
@@ -67,8 +83,8 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-// Ancient version 
-/*
+#else
+
 int main(int argc, char* argv[]) {
 
 
@@ -118,4 +134,5 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
-*/ // End of ancient version
+
+#endif
