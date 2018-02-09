@@ -10,14 +10,12 @@
 # Nom du SERVERramme
 #
 SERVER = server
-CLIENT = client
 
 #
 # Fichiers sources (NE PAS METTRE les .h ni les .o seulement les .cpp)
 #
 
 SERVER_SOURCES = photo.cpp video.cpp multim.cpp group.cpp film.cpp main.cpp cppsocket.cpp tcpserver.cpp db.cpp
-CLIENT_SOURCES = Remote.java
 #
 # Fichiers objets (ne pas modifier sauf si l'extension n'est pas .cpp)
 #
@@ -34,7 +32,7 @@ CXX = c++
 #   -std=c++11 pour C++11
 # Exemple: CXXFLAGS= -std=c++11 -Wall -O -I/usr/local/qt/include
 #
-CXXFLAGS = -std=c++11 -Wall -g 
+CXXFLAGS = -std=c++11 -Wall -O
 
 #
 # Options de l'editeur de liens
@@ -56,36 +54,32 @@ LDLIBS = -lpthread
 
 all: 
 	make ${SERVER}
-	make ${CLIENT}
 
-run-${SERVER}: ${SERVER}
+run: ${SERVER} 
 	./${SERVER} 3333
+
+
+run-deserial: ${SERVER}
+	./${SERVER} 3333 ../src/serial.out
  
-run-${CLIENT}: ${CLIENT}
-	java Remote localhost 3333
 
 ${SERVER}: depend-${SERVER} ${OBJETS}
 	${CXX} -o $@ ${CXXFLAGS} ${LDFLAGS} ${OBJETS} ${LDLIBS}
 
-${CLIENT}: 
-	javac ${CLIENT_SOURCES}
-
-
 clean:
 	-@$(RM) *.o depend-${SERVER} core 1>/dev/null 2>&1
-	-@$(RM) *.class
 
 clean-all: clean
 	-@$(RM) ${SERVER} 1>/dev/null 2>&1
 
 tar:
-	tar cvf ${SERVER}.tar.gz ${SOURCES}
+	tar cvf ${SERVER}.tar.gz ${SERVER_SOURCES}
 
 # Gestion des dependances : creation automatique des dependances en utilisant
 # l'option -MM de g++ (attention tous les compilateurs n'ont pas cette option)
 #
 depend-${SERVER}:
-	${CXX} ${CXXFLAGS} -MM ${SOURCES} > depend-${SERVER}
+	${CXX} ${CXXFLAGS} -MM ${SERVER_SOURCES} > depend-${SERVER}
 
 
 ###########################################

@@ -13,3 +13,5 @@ dox.cfg
 myprog
 server
 *.class
+
+.DS_Store

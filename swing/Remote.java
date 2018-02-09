@@ -7,18 +7,27 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Remote extends JFrame {
+    /// @brief version control
     private static final long serialVersionUID = 1L;
 
+    /// @brief menubar in the north
     JMenuBar menuBar;
+    /// @brief popup menu containing buttons
     JMenu menu;
+    /// @brief toolBar containing buttons
     JToolBar toolBar;
+    /// @brief placed in the south, containing buttons
     JPanel bHolder;
+    /// @brief display request responses
     JTextArea txt;
+    /// @brief to contain queries
     JTextField requestField;
+    /// @brief the buttons
     JButton b1, b2, b3, bExit;
 
     static final String DEFAULT_HOST = "localhost";
     static final int DEFAULT_PORT = 3332;
+    /// @brief Socket used to set up TCP communications
     private Socket sock;
     private BufferedReader input;
     private BufferedWriter output;
@@ -43,7 +52,8 @@ public class Remote extends JFrame {
             System.exit(1);
         }
     }
-
+    
+    /// @brief the application window
     public Remote(String host, int port) throws UnknownHostException, IOException {
 
         setMinimumSize(new Dimension(800, 600));
@@ -68,6 +78,7 @@ public class Remote extends JFrame {
         menuBar.add(menu);
         menuBar.add(toolBar);
 
+        /// @brief Trigue a search request
         class MyButton1 extends AbstractAction {
             public MyButton1(String name) {
                 super(name);
@@ -87,6 +98,7 @@ public class Remote extends JFrame {
             }
         }
 
+        /// @brief Trigue a play request
         class MyButton2 extends AbstractAction {
             public MyButton2(String name) {
                 super(name);
@@ -106,6 +118,7 @@ public class Remote extends JFrame {
             }
         }
 
+        /// @brief Trigue a list request for all media
         class MyButton3 extends AbstractAction {
             public MyButton3(String name) {
                 super(name);
@@ -120,6 +133,7 @@ public class Remote extends JFrame {
             }
         }
 
+        /// @brief Trigue a dump request to serialize the database
         class MyButton4 extends AbstractAction {
             public MyButton4(String name) {
                 super(name);
@@ -205,6 +219,7 @@ public class Remote extends JFrame {
         System.out.println("Client connected to "+host+":"+port);
     }
 
+    /// @brief send the request through the socket.
     public String send(String request) {
         // Envoyer la requete au serveur
         try {

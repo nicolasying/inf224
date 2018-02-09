@@ -273,4 +273,5 @@ istream& operator>> (istream& is, DB& db) {
         throw SerialParseError(buff);
         return is;
     }
+    return is;
 }

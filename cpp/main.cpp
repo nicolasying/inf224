@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
   } else if (argc >= 2) {
     PORT = atoi(argv[1]);
   } 
-  
+
   shared_ptr<DB> base(new DB());
 
   if (argc >= 3) {
@@ -44,10 +44,10 @@ int main(int argc, char* argv[]) {
       MulPtr objectList[10];
       
       objectList[0] = base->createPhoto("Neige", "./scr/1.jpg", 2014, 2014);
-      objectList[1] = base->createVideo("Norman 10 Million Bug", "./scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120);
+      objectList[1] = base->createVideo("Norman 10 Million Bug", "../scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120);
       int tempTable[] = {1, 2, 3};
-      objectList[2] = base->createFilm("Norman 10 Million Bug 2", "./scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
-      objectList[3] = base->createFilm("Norman 10 Million Bug 3", "./scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+      objectList[2] = base->createFilm("Norman 10 Million Bug 2", "../scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
+      objectList[3] = base->createFilm("Norman 10 Million Bug 3", "../scr/NORMAN\\ -\\ THE\\ 10\\ MILLION\\ BUG.mp4", 120, 3, tempTable);
       objectList[3]->setName("New Name"); // donne incohérence comme ce n'est pas le base qui gère le nommage.
       
       for (int i = 0; i < 4; i++) {
@@ -62,6 +62,11 @@ int main(int argc, char* argv[]) {
 
 
   cerr << "Main:\tContent Prepared." << endl;
+
+  // dump
+  /// ifstream fp("./scr/serial.out")
+  //  fp << *(base.get());
+  // fp.close();
   
   // cree le TCPServer
   shared_ptr<TCPServer> server(new TCPServer());
